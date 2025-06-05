@@ -1,0 +1,80 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: student-analytics
+  namespace: bdren
+  labels:
+    app: student-analytics
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: student-analytics
+  template:
+    metadata:
+      labels:
+        app: student-analytics
+    spec:
+      containers:
+      - name: student-analytics
+        image: your-registry.com/student-analytics:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8000
+        env:
+        - name: ENVIRONMENT
+          value: "production"
+        - name: DATABASE_URL
+          valueFrom:
+            secretKeyRef:
+              name: db-credentials
+              key: url
+        - name: REDIS_URL
+          valueFrom:
+            secretKeyRef:
+              name: redis-credentials
+              key: url
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "250m"
+          limits:
+            memory: "1Gi"
+            cpu: "500m"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          initialDelaySeconds: 5
+          periodSeconds: 5
+        volumeMounts:
+        - name: config
+          mountPath: /app/config
+        - name: data
+          mountPath: /app/data
+      volumes:
+      - name: config
+        configMap:
+          name: student-analytics-config
+      - name: data
+        persistentVolumeClaim:
+          claimName: student-analytics-data
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: student-analytics
+  namespace: bdren
+spec:
+  selector:
+    app: student-analytics
+  ports:
+  - port: 80
+    targetPort: 8000
+  type: LoadBalancer

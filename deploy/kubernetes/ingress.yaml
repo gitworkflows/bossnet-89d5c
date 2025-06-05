@@ -1,0 +1,24 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: student-analytics-ingress
+  namespace: bdren
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+spec:
+  tls:
+  - hosts:
+    - analytics.bdren.edu.bd
+    secretName: student-analytics-tls
+  rules:
+  - host: analytics.bdren.edu.bd
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: student-analytics
+            port:
+              number: 80
