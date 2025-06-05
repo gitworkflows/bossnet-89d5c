@@ -1,0 +1,59 @@
+# Database Configuration
+database:
+  host: localhost
+  port: 5432
+  name: student_analytics_db
+  user: ${DB_USER}
+  password: ${DB_PASSWORD}
+
+# API Configuration
+api:
+  host: 0.0.0.0
+  port: 8000
+  debug: false
+  allowed_origins:
+    - http://localhost:3000
+    - http://localhost:8080
+
+# Data Sources
+data_sources:
+  banbeis:
+    api_url: ${BANBEIS_API_URL}
+    api_key: ${BANBEIS_API_KEY}
+  education_board:
+    api_url: ${EDU_BOARD_API_URL}
+    api_key: ${EDU_BOARD_API_KEY}
+
+# File Paths
+paths:
+  raw_data: ./raw_data
+  processed_data: ./processed_data
+  models: ./models
+  reports: ./reports
+
+# Logging
+logging:
+  level: INFO
+  format: '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+  file: logs/app.log
+
+# Analysis Parameters
+analysis:
+  performance_metrics:
+    - gpa
+    - attendance_rate
+    - completion_rate
+  demographic_factors:
+    - gender
+    - location
+    - economic_status
+  geographic_analysis:
+    division_level: true
+    district_level: true
+    upazila_level: false
+
+# Security
+security:
+  encrypt_sensitive_data: true
+  data_retention_days: 365
+  backup_frequency: daily
