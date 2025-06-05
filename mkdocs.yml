@@ -1,0 +1,91 @@
+site_name: Bangladesh Student Data Analytics
+site_description: A comprehensive data analysis system for educational data in Bangladesh
+site_author: BdRen Data Analytics Team
+repo_url: https://github.com/yourusername/student-data-bangladesh
+
+theme:
+  name: material
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.top
+    - search.highlight
+  palette:
+    primary: green
+    accent: lime
+
+nav:
+  - Home: index.md
+  - Getting Started:
+    - Installation: getting-started/installation.md
+    - Configuration: getting-started/configuration.md
+    - First Steps: getting-started/first-steps.md
+  - User Guide:
+    - Data Processing: user-guide/data-processing.md
+    - Analysis: user-guide/analysis.md
+    - Visualization: user-guide/visualization.md
+    - Reporting: user-guide/reporting.md
+  - Data Sources:
+    - BANBEIS: data-sources/banbeis.md
+    - Education Board: data-sources/education-board.md
+    - DSHE: data-sources/dshe.md
+    - DPE: data-sources/dpe.md
+  - API Reference:
+    - Data Processor: api-reference/data-processor.md
+    - Models: api-reference/models.md
+    - Utilities: api-reference/utilities.md
+  - Contributing:
+    - Guidelines: contributing/guidelines.md
+    - Code of Conduct: contributing/code-of-conduct.md
+    - Development Setup: contributing/development-setup.md
+  - Data Dictionary:
+    - Overview: data-dictionary/overview.md
+    - Schemas: data-dictionary/schemas.md
+    - Mappings: data-dictionary/mappings.md
+
+markdown_extensions:
+  - admonition
+  - codehilite
+  - footnotes
+  - meta
+  - toc:
+      permalink: true
+  - pymdownx.arithmatex
+  - pymdownx.betterem:
+      smart_enable: all
+  - pymdownx.caret
+  - pymdownx.critic
+  - pymdownx.details
+  - pymdownx.emoji:
+      emoji_index: !!python/name:materialx.emoji.twemoji
+      emoji_generator: !!python/name:materialx.emoji.to_svg
+  - pymdownx.highlight
+  - pymdownx.inlinehilite
+  - pymdownx.keys
+  - pymdownx.mark
+  - pymdownx.smartsymbols
+  - pymdownx.superfences
+  - pymdownx.tabbed
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.tilde
+
+plugins:
+  - search
+  - mkdocstrings:
+      default_handler: python
+      handlers:
+        python:
+          rendering:
+            show_source: true
+      watch:
+        - src/
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/yourusername/student-data-bangladesh
+    - icon: fontawesome/brands/twitter
+      link: https://twitter.com/yourusername
+
+copyright: Copyright &copy; 2025 BdRen Data Analytics Team
