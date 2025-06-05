@@ -1,0 +1,68 @@
+apiVersion: 1
+
+providers:
+  - name: 'Student Analytics Dashboards'
+    orgId: 1
+    folder: ''
+    type: file
+    disableDeletion: false
+    editable: true
+    options:
+      path: /var/lib/grafana/dashboards
+
+dashboards:
+  - name: 'Application Overview'
+    message: 'Student Analytics Application Overview'
+    json: |
+      {
+        "annotations": {
+          "list": []
+        },
+        "editable": true,
+        "gnetId": null,
+        "graphTooltip": 0,
+        "id": 1,
+        "links": [],
+        "panels": [
+          {
+            "title": "API Request Rate",
+            "type": "graph"
+          },
+          {
+            "title": "Response Time",
+            "type": "graph"
+          },
+          {
+            "title": "Error Rate",
+            "type": "graph"
+          },
+          {
+            "title": "Database Connections",
+            "type": "graph"
+          },
+          {
+            "title": "Memory Usage",
+            "type": "graph"
+          },
+          {
+            "title": "CPU Usage",
+            "type": "graph"
+          }
+        ],
+        "refresh": "5s",
+        "schemaVersion": 16,
+        "style": "dark",
+        "tags": [],
+        "templating": {
+          "list": []
+        },
+        "time": {
+          "from": "now-6h",
+          "to": "now"
+        },
+        "timepicker": {},
+        "timezone": "",
+        "title": "Student Analytics Overview",
+        "uid": "student_analytics_overview",
+        "version": 1
+      }
