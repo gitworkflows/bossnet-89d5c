@@ -1,0 +1,5 @@
+# English localization for dashboard
+welcome: "Welcome to the National Education Dashboard"
+student_performance: "Student Performance"
+dropout_rate: "Dropout Rate"
+equity_index: "Equity Index"

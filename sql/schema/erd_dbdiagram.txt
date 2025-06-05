@@ -1,0 +1,67 @@
+Table students {
+  student_id UUID [pk]
+  full_name VARCHAR
+  gender VARCHAR
+  date_of_birth DATE
+  division VARCHAR
+  district VARCHAR
+  upazila VARCHAR
+  socioeconomic_status VARCHAR
+  disability_status VARCHAR
+  guardian_contact VARCHAR
+  created_at TIMESTAMP
+}
+
+Table schools {
+  school_id UUID [pk]
+  name VARCHAR
+  division VARCHAR
+  district VARCHAR
+  upazila VARCHAR
+  type VARCHAR
+  education_level VARCHAR
+  is_rural BOOLEAN
+  geo_location VARCHAR
+  contact_info VARCHAR
+  created_at TIMESTAMP
+}
+
+Table enrollments {
+  enrollment_id UUID [pk]
+  student_id UUID [ref: > students.student_id]
+  school_id UUID [ref: > schools.school_id]
+  enrollment_year INT
+  grade VARCHAR
+  status VARCHAR
+  dropout_reason VARCHAR
+  transfer_school_id UUID
+  created_at TIMESTAMP
+}
+
+Table lookup_grades {
+  grade_id int [pk]
+  grade_level varchar
+  description varchar
+}
+
+Table lookup_divisions {
+  division_id int [pk]
+  division_name varchar
+}
+
+Table lookup_districts {
+  district_id int [pk]
+  district_name varchar
+  division_id int [ref: > lookup_divisions.division_id]
+}
+
+Table lookup_upazilas {
+  upazila_id int [pk]
+  upazila_name varchar
+  district_id int [ref: > lookup_districts.district_id]
+}
+
+Table dropout_reasons {
+  reason_id int [pk]
+  reason_text varchar
+}

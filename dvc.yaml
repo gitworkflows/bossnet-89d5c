@@ -1,0 +1,11 @@
+stages:
+  prepare_data:
+    cmd: python src/data_processing/extract_data.py
+    outs:
+      - data/processed/cleaned_data.csv
+  train_model:
+    cmd: python src/models/student_performance_model.py
+    deps:
+      - data/processed/cleaned_data.csv
+    outs:
+      - models/student_performance_model.pkl
