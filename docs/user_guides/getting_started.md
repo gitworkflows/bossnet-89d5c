@@ -38,7 +38,7 @@ Before you begin working with the Bangladesh Student Data Analysis project, ensu
    ```bash
    # Create the database
    createdb student_analytics_db
-   
+
    # Run migrations
    python src/data_processing/run_migrations.py
    ```

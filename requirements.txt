@@ -48,3 +48,14 @@ isort>=5.9.0
 # Data Quality and Validation
 great-expectations>=0.13.0
 pandas-profiling>=3.0.0
+
+# Add your project dependencies here
+pandas
+numpy
+sqlalchemy
+matplotlib
+scikit-learn
+fastapi
+uvicorn
+python-dotenv
+pyyaml

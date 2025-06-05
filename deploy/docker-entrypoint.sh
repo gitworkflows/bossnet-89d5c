@@ -35,11 +35,11 @@ collect_static() {
 init_app() {
     wait_for_db
     wait_for_redis
-    
+
     if [ "$ENVIRONMENT" != "production" ]; then
         run_migrations
     fi
-    
+
     collect_static
 }
 

@@ -27,9 +27,9 @@
 
 ## Testing Steps
 <!-- Provide steps to test the changes -->
-1. 
-2. 
-3. 
+1.
+2.
+3.
 
 ## Screenshots (if applicable)
 <!-- Add screenshots to demonstrate visual changes -->

@@ -1,0 +1,16 @@
+# environment.yml
+name: student-data-bangladesh
+channels:
+  - defaults
+  - conda-forge
+dependencies:
+  - python=3.10
+  - pandas
+  - numpy
+  - sqlalchemy
+  - matplotlib
+  - scikit-learn
+  - fastapi
+  - uvicorn
+  - python-dotenv
+  - pyyaml

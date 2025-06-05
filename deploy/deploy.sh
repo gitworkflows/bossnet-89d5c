@@ -27,14 +27,14 @@ fi
 deploy_compose() {
     local env=$1
     echo "Deploying to $env environment..."
-    
+
     # Build and tag the image
     docker-compose build
     docker tag bdren-student-analytics:latest $DOCKER_REGISTRY/$PROJECT_NAME:$VERSION
-    
+
     # Push to registry
     docker push $DOCKER_REGISTRY/$PROJECT_NAME:$VERSION
-    
+
     # Deploy using appropriate compose file
     if [ "$env" == "production" ]; then
         docker-compose -f docker-compose.yml -f deploy/docker-compose.prod.yml up -d
@@ -54,7 +54,7 @@ verify_deployment() {
     echo "Verifying deployment..."
     local attempts=0
     local max_attempts=30
-    
+
     while [ $attempts -lt $max_attempts ]; do
         if curl -s http://localhost:${PORT:-8000}/health | grep -q "ok"; then
             echo "Deployment verified successfully!"
@@ -63,7 +63,7 @@ verify_deployment() {
         attempts=$((attempts + 1))
         sleep 2
     done
-    
+
     echo "Deployment verification failed!"
     return 1
 }
