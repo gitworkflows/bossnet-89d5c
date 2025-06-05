@@ -1,4 +1,5 @@
 """Plot generation utilities for the student data system."""
+
 # plot_generator.py
 # Placeholder for plot generation code
 

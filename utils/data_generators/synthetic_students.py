@@ -1,4 +1,5 @@
 """Synthetic student data generator for testing and modeling without PII."""
+
 import random
 
 import pandas as pd

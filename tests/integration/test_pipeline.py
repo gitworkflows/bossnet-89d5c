@@ -1,4 +1,5 @@
 """Integration test for the full data processing and prediction pipeline."""
+
 import pandas as pd
 
 from src.data_processing.pipeline import process_data

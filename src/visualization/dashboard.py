@@ -1,4 +1,5 @@
 """Dashboard generation for the student data system."""
+
 # dashboard.py
 # Placeholder for dashboard code
 
