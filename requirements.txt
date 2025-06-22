@@ -1,3 +1,29 @@
+# Core Dependencies
+python-dotenv>=0.19.0
+pyyaml>=5.4.0
+pydantic>=1.9.0
+python-jose[cryptography]>=3.3.0
+passlib[bcrypt]>=1.7.4
+python-multipart>=0.0.5
+email-validator>=1.1.3
+python-dateutil>=2.8.2
+
+# Web Framework
+fastapi>=0.68.0
+uvicorn>=0.15.0
+starlette>=0.19.0
+
+# Database
+sqlalchemy>=1.4.0
+sqlalchemy[asyncio]>=1.4.0
+alembic>=1.7.4
+asyncpg>=0.24.0  # For async PostgreSQL
+
+# Authentication
+python-jose[cryptography]>=3.3.0
+passlib[bcrypt]>=1.7.4
+python-multipart>=0.0.5
+
 # Data Processing
 numpy>=1.21.0
 pandas>=1.3.0
@@ -19,43 +45,50 @@ notebook>=6.4.0
 geopandas>=0.9.0
 folium>=0.12.0
 
-# Database
-sqlalchemy>=1.4.0
-psycopg2-binary>=2.9.0
-
-# API Development
-fastapi>=0.68.0
-uvicorn>=0.15.0
-
 # Testing
 pytest>=6.2.0
 pytest-cov>=2.12.0
+pytest-asyncio>=0.15.1
+httpx>=0.19.0
 
 # Documentation
 sphinx>=4.0.0
 mkdocs>=1.2.0
 
-# Utilities
-python-dotenv>=0.19.0
-pyyaml>=5.4.0
-tqdm>=4.62.0
-
 # Code Quality
 black>=21.6b0
 flake8>=3.9.0
 isort>=5.9.0
+mypy>=0.910
 
 # Data Quality and Validation
 great-expectations>=0.13.0
 pandas-profiling>=3.0.0
 
-# Add your project dependencies here
-pandas
-numpy
-sqlalchemy
-matplotlib
-scikit-learn
-fastapi
-uvicorn
-python-dotenv
-pyyaml
+# API Dependencies
+fastapi==0.104.1
+uvicorn==0.24.0
+python-multipart==0.0.6
+python-jose[cryptography]==3.3.0
+passlib[bcrypt]==1.7.4
+python-dotenv==1.0.0
+
+# Database
+sqlalchemy==2.0.23
+psycopg2-binary==2.9.9
+alembic==1.12.1
+
+# Data Processing
+pandas==2.1.3
+numpy==1.26.2
+
+# Utils
+python-dateutil==2.8.2
+pydantic==2.5.1
+pydantic-settings==2.0.3
+email-validator==2.1.0.post1
+
+# Testing
+pytest==7.4.3
+pytest-cov==4.1.0
+httpx==0.25.1

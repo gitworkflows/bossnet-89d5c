@@ -1,0 +1,74 @@
+name: 'bangladesh_education'
+version: '1.0.0'
+config-version: 2
+
+profile: 'bangladesh_education'
+
+model-paths: ["models"]
+analysis-paths: ["analyses"]
+test-paths: ["tests"]
+seed-paths: ["seeds"]
+macro-paths: ["macros"]
+
+target-path: "target"
+clean-targets:
+  - "target"
+  - "dbt_packages"
+  - "logs"
+
+models:
+  bangladesh_education:
+    staging:
+      +materialized: view
+      +schema: staging
+      +tags: ["staging"]
+      
+    dimensions:
+      +materialized: table
+      +schema: dimensions
+      +tags: ["dimensions"]
+      
+    facts:
+      +materialized: incremental
+      +schema: facts
+      +tags: ["facts"]
+      
+    marts:
+      education:
+        +materialized: table
+        +schema: marts
+        +tags: ["marts", "education"]
+      
+      equity:
+        +materialized: table
+        +schema: marts
+        +tags: ["marts", "equity"]
+
+seeds:
+  bangladesh_education:
+    +enabled: true
+    +schema: seed_data
+    +quote_columns: true
+
+vars:
+  # Default variables
+  start_date: '2015-01-01'
+  time_grains: [day, week, month, quarter, year]
+  
+  # Schema names
+  raw_schema: raw
+  staging_schema: staging
+  dimensions_schema: dimensions
+  facts_schema: facts
+  marts_schema: marts
+  seed_schema: seed_data
+
+# Configure your docs
+# docs:
+#   show:
+#     # Show/hide the breadcrumbs at top of docs page
+#     breadcrumbs: true
+#     # Show/hide the navigation bar with search & info on the right side
+#     navigation: true
+#     # Show/hide the top navigation bar
+#     top_nav: true

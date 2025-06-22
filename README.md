@@ -20,14 +20,24 @@ student-data-bangladesh/
 
 ## Features
 
+- Secure JWT-based authentication
+- Role-based access control (Admin, Teacher, Staff, Student)
 - Data collection from multiple educational sources
 - Automated data processing and validation
 - Statistical analysis and modeling
 - Interactive visualizations and dashboards
-- API for data access
+- RESTful API with OpenAPI documentation
 - Comprehensive monitoring and reporting
 
 ## Getting Started
+
+### Prerequisites
+
+- Python 3.8+
+- PostgreSQL 12+
+- pip (Python package manager)
+
+### Installation
 
 1. Clone the repository:
    ```bash
@@ -35,21 +45,69 @@ student-data-bangladesh/
    cd student-data-bangladesh
    ```
 
-2. Set up development environment:
+2. Create and activate a virtual environment:
    ```bash
-   ./setup_dev_environment.sh
+   python -m venv venv
+   source venv/bin/activate  # On Windows: venv\Scripts\activate
    ```
 
-3. Configure environment variables:
+3. Install dependencies:
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+4. Configure environment variables:
    ```bash
    cp .env.example .env
    # Edit .env with your configurations
    ```
 
-4. Run tests:
+5. Set up the database:
    ```bash
-   pytest
+   # Create database in PostgreSQL
+   createdb student_data_db
+   
+   # Run migrations
+   alembic upgrade head
+   
+   # Or initialize database directly
+   python scripts/init_db.py
    ```
+
+6. Run the development server:
+   ```bash
+   python run_api.py
+   ```
+   The API will be available at http://localhost:8000
+
+### API Documentation
+
+Once the server is running, you can access:
+
+- Interactive API documentation: http://localhost:8000/docs
+- OpenAPI schema: http://localhost:8000/openapi.json
+
+### Authentication
+
+1. Get an access token:
+   ```bash
+   curl -X 'POST' \
+     'http://localhost:8000/api/v1/auth/token' \
+     -H 'accept: application/json' \
+     -H 'Content-Type: application/x-www-form-urlencoded' \
+     -d 'grant_type=password&username=admin&password=admin123'
+   ```
+
+2. Use the access token in subsequent requests:
+   ```
+   Authorization: Bearer <access_token>
+   ```
+
+### Running Tests
+
+```bash
+pytest
+```
 
 ## Development
 
@@ -83,12 +141,41 @@ student-data-bangladesh/
 
 ## Deployment
 
-Three deployment environments:
-1. Development (Docker Compose)
-2. Staging (Docker Compose with production-like data)
-3. Production (Kubernetes cluster)
+### Development (Docker Compose)
 
-See [Deployment Guide](docs/deployment.md) for details.
+1. Build and start the services:
+   ```bash
+   docker-compose up -d --build
+   ```
+
+2. Run database migrations:
+   ```bash
+   docker-compose exec web alembic upgrade head
+   ```
+
+3. Access the API at http://localhost:8000
+
+### Production (Recommended)
+
+For production deployment, it's recommended to use:
+
+1. A production-grade ASGI server like Uvicorn with Gunicorn
+2. A reverse proxy like Nginx
+3. Process manager like Systemd or Supervisor
+4. Container orchestration with Kubernetes for high availability
+
+See [Deployment Guide](docs/deployment.md) for detailed production deployment instructions.
+
+### Environment Variables
+
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `DATABASE_URL` | Database connection URL | `postgresql://postgres:postgres@db:5432/student_data_db` |
+| `SECRET_KEY` | Secret key for JWT tokens | `your-secret-key-change-in-production` |
+| `ALGORITHM` | JWT signing algorithm | `HS256` |
+| `ACCESS_TOKEN_EXPIRE_MINUTES` | Token expiration time in minutes | `30` |
+| `CORS_ORIGINS` | Allowed CORS origins (comma-separated) | `*` |
+| `LOG_LEVEL` | Logging level | `INFO` |
 
 ## Monitoring
 

@@ -1,0 +1,807 @@
+version: 2
+
+# Sources represent the raw data loaded into the data warehouse
+sources:
+  - name: raw
+    description: "Raw data loaded from source systems"
+    schema: raw
+    
+    tables:
+      - name: students
+        description: "Raw student data from source system"
+        columns:
+          - name: student_id
+            description: "Primary key for students"
+            tests:
+              - unique
+              - not_null
+          - name: full_name
+            description: "Student's full name"
+          - name: gender
+            description: "Student's gender"
+          - name: date_of_birth
+            description: "Student's date of birth"
+          - name: division
+            description: "Administrative division"
+          - name: district
+            description: "Administrative district"
+          - name: upazila
+            description: "Administrative upazila"
+          - name: socioeconomic_status
+            description: "Socioeconomic status indicator"
+          - name: disability_status
+            description: "Any disability status"
+          - name: guardian_contact
+            description: "Contact information for guardian"
+          - name: created_at
+            description: "Timestamp when record was created"
+
+      - name: schools
+        description: "Raw school data from source system"
+        columns:
+          - name: school_id
+            description: "Primary key for schools"
+            tests:
+              - unique
+              - not_null
+          - name: name
+            description: "School name"
+          - name: type
+            description: "Type of school (e.g., primary, secondary)"
+          - name: education_level
+            description: "Education levels offered"
+          - name: is_rural
+            description: "Whether the school is in a rural area"
+          - name: geo_location
+            description: "Geographic coordinates"
+          - name: contact_info
+            description: "School contact information"
+          - name: created_at
+            description: "Timestamp when record was created"
+
+      - name: enrollments
+        description: "Raw enrollment data from source system"
+        columns:
+          - name: enrollment_id
+            description: "Primary key for enrollments"
+            tests:
+              - unique
+              - not_null
+          - name: student_id
+            description: "Reference to student"
+            tests:
+              - not_null
+              - relationships:
+                  to: ref('stg_students')
+                  field: student_id
+          - name: school_id
+            description: "Reference to school"
+            tests:
+              - not_null
+              - relationships:
+                  to: ref('stg_schools')
+                  field: school_id
+          - name: enrollment_year
+            description: "Academic year of enrollment"
+          - name: grade
+            description: "Grade level"
+          - name: status
+            description: "Enrollment status (active, transferred, dropped out)"
+          - name: dropout_reason
+            description: "Reason for dropping out, if applicable"
+          - name: transfer_school_id
+            description: "School ID if transferred"
+          - name: created_at
+            description: "Timestamp when record was created"
+
+      - name: teachers
+        description: "Raw teacher data from source system"
+        columns:
+          - name: teacher_id
+            description: "Primary key for teachers"
+            tests:
+              - unique
+              - not_null
+          - name: full_name
+            description: "Teacher's full name"
+          - name: gender
+            description: "Teacher's gender"
+          - name: date_of_birth
+            description: "Teacher's date of birth"
+          - name: qualification
+            description: "Teacher's highest qualification"
+          - name: subject_specialization
+            description: "Subject specialization"
+          - name: join_date
+            description: "Date teacher joined the school"
+          - name: email
+            description: "Contact email"
+          - name: phone_number
+            description: "Contact phone number"
+          - name: nid_number
+            description: "National ID number"
+          - name: present_address
+            description: "Current address"
+          - name: permanent_address
+            description: "Permanent address"
+          - name: is_active
+            description: "Whether the teacher is currently active"
+          - name: created_at
+            description: "Timestamp when record was created"
+          - name: updated_at
+            description: "Timestamp when record was last updated"
+
+      - name: attendances
+        description: "Raw student attendance records"
+        columns:
+          - name: attendance_id
+            description: "Primary key for attendance records"
+            tests:
+              - unique
+              - not_null
+          - name: student_id
+            description: "Reference to student"
+            tests:
+              - not_null
+              - relationships:
+                  to: ref('stg_students')
+                  field: student_id
+          - name: school_id
+            description: "Reference to school"
+            tests:
+              - not_null
+              - relationships:
+                  to: ref('stg_schools')
+                  field: school_id
+          - name: attendance_date
+            description: "Date of attendance"
+            tests:
+              - not_null
+          - name: is_present
+            description: "Whether the student was present"
+            tests:
+              - not_null
+          - name: reason_for_absence
+            description: "Reason for absence, if applicable"
+          - name: recorded_by
+            description: "User who recorded the attendance"
+          - name: recorded_at
+            description: "Timestamp when attendance was recorded"
+          - name: academic_year
+            description: "Academic year"
+          - name: term
+            description: "Academic term"
+          - name: grade
+            description: "Grade level"
+          - name: section
+            description: "Class section"
+          - name: subject_id
+            description: "Subject ID, if attendance is subject-specific"
+
+      - name: assessment_results
+        description: "Raw student assessment results"
+        columns:
+          - name: assessment_result_id
+            description: "Primary key for assessment results"
+            tests:
+              - unique
+              - not_null
+          - name: student_id
+            description: "Reference to student"
+            tests:
+              - not_null
+              - relationships:
+                  to: ref('stg_students')
+                  field: student_id
+          - name: teacher_id
+            description: "Reference to teacher who assessed"
+            tests:
+              - relationships:
+                  to: ref('stg_teachers')
+                  field: teacher_id
+          - name: school_id
+            description: "Reference to school"
+            tests:
+              - not_null
+              - relationships:
+                  to: ref('stg_schools')
+                  field: school_id
+          - name: assessment_id
+            description: "Reference to assessment"
+          - name: assessment_date
+            description: "Date assessment was taken"
+            tests:
+              - not_null
+          - name: academic_year
+            description: "Academic year"
+          - name: term
+            description: "Academic term"
+          - name: subject_id
+            description: "Subject ID"
+          - name: grade
+            description: "Grade level"
+          - name: section
+            description: "Class section"
+          - name: marks_obtained
+            description: "Marks obtained by student"
+          - name: max_marks
+            description: "Maximum possible marks"
+          - name: percentage
+            description: "Percentage score"
+          - name: grade_letter
+            description: "Letter grade"
+          - name: is_passed
+            description: "Whether the student passed"
+          - name: remarks
+            description: "Additional remarks"
+          - name: recorded_at
+            description: "Timestamp when result was recorded"
+          - name: recorded_by
+            description: "User who recorded the result"
+          - name: assessment_type
+            description: "Type of assessment (Exam, Quiz, Assignment, etc.)"
+          - name: assessment_category
+            description: "Category of assessment (Formative, Summative, etc.)"
+          - name: is_makeup_exam
+            description: "Whether this is a makeup/retake exam"
+
+# Models represent the transformed tables in the data warehouse
+models:
+  - name: stg_students
+    description: "Staging model for student data"
+    columns:
+      - name: student_id
+        description: "Primary key for students"
+        tests:
+          - unique
+          - not_null
+      - name: full_name
+        description: "Student's full name"
+      - name: gender
+        description: "Student's gender"
+      - name: date_of_birth
+        description: "Student's date of birth"
+      - name: division
+        description: "Administrative division"
+      - name: district
+        description: "Administrative district"
+      - name: upazila
+        description: "Administrative upazila"
+      - name: socioeconomic_status
+        description: "Socioeconomic status indicator"
+      - name: disability_status
+        description: "Any disability status"
+      - name: guardian_contact
+        description: "Contact information for guardian"
+      - name: created_at
+        description: "Timestamp when record was created"
+
+  - name: dim_students
+    description: "Dimension table for students with SCD Type 2 support"
+    columns:
+      - name: student_key
+        description: "Surrogate key for the student dimension"
+        tests:
+          - unique
+          - not_null
+      - name: student_id
+        description: "Business key for the student"
+        tests:
+          - not_null
+      - name: full_name
+        description: "Student's full name"
+      - name: first_name
+        description: "Student's first name"
+      - name: last_name
+        description: "Student's last name"
+      - name: gender
+        description: "Standardized gender (Male, Female, Other, Unknown)"
+      - name: date_of_birth
+        description: "Student's date of birth"
+      - name: age
+        description: "Student's current age in years"
+      - name: age_group
+        description: "Age group category"
+      - name: division
+        description: "Administrative division"
+      - name: district
+        description: "Administrative district"
+      - name: upazila
+        description: "Administrative upazila"
+      - name: area_type
+        description: "Urban or rural classification"
+      - name: socioeconomic_status
+        description: "Socioeconomic status indicator"
+      - name: has_disability
+        description: "Whether the student has a disability"
+      - name: disability_status
+        description: "Type of disability, if any"
+      - name: guardian_contact
+        description: "Contact information for guardian"
+      - name: is_current
+        description: "Whether this is the current version of the record"
+      - name: effective_from
+        description: "Date from which this version is effective"
+      - name: effective_to
+        description: "Date until which this version is effective"
+      - name: dwh_created_at
+        description: "When the record was created in the data warehouse"
+      - name: dwh_updated_at
+        description: "When the record was last updated in the data warehouse"
+      - name: record_source
+        description: "Source of the record"
+
+  - name: dim_teachers
+    description: "Dimension table for teachers with SCD Type 2 support"
+    columns:
+      - name: teacher_key
+        description: "Surrogate key for the teacher dimension"
+        tests:
+          - unique
+          - not_null
+      - name: teacher_id
+        description: "Business key for the teacher"
+        tests:
+          - not_null
+      - name: full_name
+        description: "Teacher's full name"
+      - name: first_name
+        description: "Teacher's first name"
+      - name: last_name
+        description: "Teacher's last name"
+      - name: gender
+        description: "Standardized gender (Male, Female, Other, Unknown)"
+      - name: date_of_birth
+        description: "Teacher's date of birth"
+      - name: qualification
+        description: "Teacher's highest qualification"
+      - name: subject_specialization
+        description: "Subject specialization"
+      - name: join_date
+        description: "Date teacher joined the school"
+      - name: years_of_experience
+        description: "Total years of teaching experience"
+      - name: experience_level
+        description: "Experience level category (Novice, Experienced, Veteran)"
+      - name: is_active
+        description: "Whether the teacher is currently active"
+      - name: email
+        description: "Contact email"
+      - name: phone_number
+        description: "Contact phone number"
+      - name: nid_number
+        description: "National ID number"
+      - name: present_address
+        description: "Current address"
+      - name: permanent_address
+        description: "Permanent address"
+      - name: is_current
+        description: "Whether this is the current version of the record"
+      - name: effective_from
+        description: "Date from which this version is effective"
+      - name: effective_to
+        description: "Date until which this version is effective"
+      - name: dwh_created_at
+        description: "When the record was created in the data warehouse"
+      - name: dwh_updated_at
+        description: "When the record was last updated in the data warehouse"
+      - name: record_source
+        description: "Source of the record"
+
+  - name: dim_geography
+    description: "Dimension table for geographic locations"
+    columns:
+      - name: geography_key
+        description: "Surrogate key for the geography dimension"
+        tests:
+          - unique
+          - not_null
+      - name: division_name
+        description: "Name of the division"
+      - name: district_name
+        description: "Name of the district"
+      - name: upazila_name
+        description: "Name of the upazila"
+      - name: original_division
+        description: "Original division name from source"
+      - name: original_district
+        description: "Original district name from source"
+      - name: original_upazila
+        description: "Original upazila name from source"
+      - name: division_id
+        description: "Unique identifier for division"
+      - name: district_id
+        description: "Unique identifier for district"
+      - name: upazila_id
+        description: "Unique identifier for upazila"
+      - name: urban_rural_classification
+        description: "Classification as Urban or Rural"
+      - name: dwh_created_at
+        description: "When the record was created in the data warehouse"
+      - name: dwh_updated_at
+        description: "When the record was last updated in the data warehouse"
+      - name: record_source
+        description: "Source of the record"
+
+  - name: dim_time
+    description: "Date dimension with academic calendar support"
+    columns:
+      - name: date_id
+        description: "Surrogate key in YYYYMMDD format"
+        tests:
+          - unique
+          - not_null
+      - name: full_date
+        description: "Calendar date"
+      - name: year
+        description: "Calendar year"
+      - name: fiscal_year
+        description: "Fiscal year (July-June)"
+      - name: academic_year
+        description: "Academic year (e.g., 2023-2024)"
+      - name: quarter
+        description: "Calendar quarter (1-4)"
+      - name: quarter_name
+        description: "Quarter name (Q1-Q4)"
+      - name: quarter_year
+        description: "Quarter and year (e.g., Q1 2023)"
+      - name: month
+        description: "Month number (1-12)"
+      - name: month_name
+        description: "Full month name (January-December)"
+      - name: month_short_name
+        description: "Abbreviated month name (Jan-Dec)"
+      - name: day
+        description: "Day of month (1-31)"
+      - name: day_of_week
+        description: "Day of week (1=Sunday, 7=Saturday)"
+      - name: day_name
+        description: "Full day name (Sunday-Saturday)"
+      - name: day_short_name
+        description: "Abbreviated day name (Sun-Sat)"
+      - name: day_of_year
+        description: "Day of year (1-366)"
+      - name: week_of_year
+        description: "Week number of year (1-53)"
+      - name: academic_term
+        description: "Academic term (Spring, Fall)"
+      - name: bangladesh_holiday
+        description: "Name of Bangladeshi holiday, if any"
+      - name: is_weekday
+        description: "Whether the day is a weekday"
+      - name: is_holiday
+        description: "Whether the day is a holiday"
+      - name: year_month
+        description: "Year and month in YYYYMM format"
+      - name: academic_period
+        description: "Academic period (e.g., 2023-2024 Spring)"
+      - name: days_from_today
+        description: "Days from current date (negative for past, positive for future)"
+      - name: days_to_today
+        description: "Days to current date (positive for past, negative for future)"
+
+  - name: fct_attendances
+    description: "Fact table for student attendance records"
+    columns:
+      - name: attendance_key
+        description: "Surrogate key for attendance records"
+        tests:
+          - unique
+          - not_null
+      - name: attendance_id
+        description: "Business key for attendance"
+      - name: student_id
+        description: "Reference to student"
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_students')
+              field: student_id
+      - name: school_id
+        description: "Reference to school"
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_schools')
+              field: school_id
+      - name: subject_id
+        description: "Reference to subject, if attendance is subject-specific"
+      - name: attendance_date
+        description: "Date of attendance"
+        tests:
+          - not_null
+      - name: attendance_month
+        description: "First day of the month for aggregation"
+      - name: attendance_quarter
+        description: "First day of the quarter for aggregation"
+      - name: attendance_year
+        description: "First day of the year for aggregation"
+      - name: academic_year
+        description: "Academic year"
+      - name: term
+        description: "Academic term"
+      - name: grade
+        description: "Grade level"
+      - name: section
+        description: "Class section"
+      - name: is_present
+        description: "Whether the student was present"
+        tests:
+          - not_null
+      - name: is_excused
+        description: "Whether the absence was excused"
+      - name: reason_for_absence
+        description: "Reason for absence, if applicable"
+      - name: present_count
+        description: "1 if present, 0 if absent (for aggregation)"
+      - name: excused_absence_count
+        description: "1 if absent with excuse, 0 otherwise (for aggregation)"
+      - name: unexcused_absence_count
+        description: "1 if absent without excuse, 0 otherwise (for aggregation)"
+      - name: recorded_by
+        description: "User who recorded the attendance"
+      - name: recorded_at
+        description: "Timestamp when attendance was recorded"
+        tests:
+          - not_null
+      - name: dwh_created_at
+        description: "When the record was created in the data warehouse"
+      - name: dwh_updated_at
+        description: "When the record was last updated in the data warehouse"
+      - name: record_source
+        description: "Source of the record"
+
+  - name: fct_assessment_results
+    description: "Fact table for student assessment results"
+    columns:
+      - name: assessment_result_key
+        description: "Surrogate key for assessment results"
+        tests:
+          - unique
+          - not_null
+      - name: assessment_result_id
+        description: "Business key for assessment result"
+      - name: student_id
+        description: "Reference to student"
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_students')
+              field: student_id
+      - name: teacher_id
+        description: "Reference to teacher who assessed"
+        tests:
+          - relationships:
+              to: ref('dim_teachers')
+              field: teacher_id
+      - name: school_id
+        description: "Reference to school"
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_schools')
+              field: school_id
+      - name: assessment_id
+        description: "Reference to assessment"
+      - name: subject_id
+        description: "Reference to subject"
+      - name: assessment_date
+        description: "Date assessment was taken"
+        tests:
+          - not_null
+      - name: recorded_at
+        description: "Timestamp when result was recorded"
+        tests:
+          - not_null
+      - name: academic_year
+        description: "Academic year"
+      - name: term
+        description: "Academic term"
+      - name: grade
+        description: "Grade level"
+      - name: section
+        description: "Class section"
+      - name: assessment_type
+        description: "Type of assessment (Exam, Quiz, Assignment, etc.)"
+      - name: assessment_category
+        description: "Category of assessment (Formative, Summative, etc.)"
+      - name: is_makeup_exam
+        description: "Whether this is a makeup/retake exam"
+      - name: marks_obtained
+        description: "Marks obtained by student"
+      - name: max_marks
+        description: "Maximum possible marks"
+      - name: percentage
+        description: "Percentage score"
+      - name: grade_letter
+        description: "Letter grade"
+      - name: is_passed
+        description: "Whether the student passed"
+      - name: remarks
+        description: "Additional remarks"
+      - name: standardized_grade
+        description: "Standardized letter grade based on percentage"
+      - name: calculated_percentage
+        description: "Recalculated percentage for validation"
+      - name: performance_category
+        description: "Performance category (Excellent, Good, etc.)"
+      - name: recorded_by
+        description: "User who recorded the result"
+      - name: dwh_created_at
+        description: "When the record was created in the data warehouse"
+      - name: dwh_updated_at
+        description: "When the record was last updated in the data warehouse"
+      - name: record_source
+        description: "Source of the record"
+
+  - name: student_performance
+    description: "Mart for analyzing student performance across dimensions"
+    columns:
+      - name: student_performance_key
+        description: "Surrogate key for student performance records"
+        tests:
+          - unique
+          - not_null
+      - name: student_key
+        description: "Reference to student dimension"
+        tests:
+          - relationships:
+              to: ref('dim_students')
+              field: student_key
+      - name: student_id
+        description: "Reference to student"
+        tests:
+          - not_null
+      - name: school_id
+        description: "Reference to school"
+        tests:
+          - not_null
+      - name: subject_id
+        description: "Reference to subject"
+      - name: student_name
+        description: "Student's full name"
+      - name: gender
+        description: "Student's gender"
+      - name: age
+        description: "Student's age"
+      - name: age_group
+        description: "Student's age group"
+      - name: school_name
+        description: "Name of the school"
+      - name: school_type
+        description: "Type of school"
+      - name: education_level
+        description: "Education level of the school"
+      - name: is_rural
+        description: "Whether the school is in a rural area"
+      - name: division_name
+        description: "Name of the division"
+      - name: district_name
+        description: "Name of the district"
+      - name: upazila_name
+        description: "Name of the upazila"
+      - name: urban_rural_classification
+        description: "Urban or rural classification"
+      - name: academic_year
+        description: "Academic year"
+      - name: term
+        description: "Academic term"
+      - name: grade
+        description: "Grade level"
+      - name: section
+        description: "Class section"
+      - name: total_assessments
+        description: "Total number of assessments taken"
+      - name: avg_percentage
+        description: "Average percentage across all assessments"
+      - name: avg_exam_percentage
+        description: "Average percentage in exams"
+      - name: avg_quiz_percentage
+        description: "Average percentage in quizzes"
+      - name: avg_assignment_percentage
+        description: "Average percentage in assignments"
+      - name: count_a_plus
+        description: "Number of A+ grades"
+      - name: count_a
+        description: "Number of A grades"
+      - name: count_a_minus
+        description: "Number of A- grades"
+      - name: count_b
+        description: "Number of B grades"
+      - name: count_c
+        description: "Number of C grades"
+      - name: count_d
+        description: "Number of D grades"
+      - name: count_f
+        description: "Number of F grades"
+      - name: attendance_percentage
+        description: "Percentage of days present"
+      - name: total_present
+        description: "Total number of days present"
+      - name: total_absent
+        description: "Total number of days absent"
+      - name: performance_category
+        description: "Overall performance category"
+      - name: attendance_category
+        description: "Overall attendance category"
+      - name: as_of_date
+        description: "Date when the record was calculated"
+      - name: dwh_created_at
+        description: "When the record was created in the data warehouse"
+
+  - name: equity_metrics
+    description: "Mart for analyzing educational equity across different dimensions"
+    columns:
+      - name: equity_metric_key
+        description: "Surrogate key for equity metrics"
+        tests:
+          - unique
+          - not_null
+      - name: division_name
+        description: "Name of the division"
+      - name: district_name
+        description: "Name of the district"
+      - name: upazila_name
+        description: "Name of the upazila"
+      - name: urban_rural_classification
+        description: "Urban or rural classification"
+      - name: school_type
+        description: "Type of school"
+      - name: education_level
+        description: "Education level"
+      - name: academic_year
+        description: "Academic year"
+      - name: grade
+        description: "Grade level"
+      - name: total_students
+        description: "Total number of students in the group"
+      - name: overall_avg_performance
+        description: "Average performance across all students"
+      - name: overall_attendance_rate
+        description: "Average attendance rate"
+      - name: female_avg_performance
+        description: "Average performance for female students"
+      - name: male_avg_performance
+        description: "Average performance for male students"
+      - name: gender_gap
+        description: "Performance gap between male and female students"
+      - name: low_income_avg_performance
+        description: "Average performance for low-income students"
+      - name: non_low_income_avg_performance
+        description: "Average performance for non-low-income students"
+      - name: income_gap
+        description: "Performance gap between income groups"
+      - name: with_disability_avg_performance
+        description: "Average performance for students with disabilities"
+      - name: without_disability_avg_performance
+        description: "Average performance for students without disabilities"
+      - name: disability_gap
+        description: "Performance gap between students with and without disabilities"
+      - name: rural_avg_performance
+        description: "Average performance in rural areas"
+      - name: urban_avg_performance
+        description: "Average performance in urban areas"
+      - name: urban_rural_gap
+        description: "Performance gap between urban and rural areas"
+      - name: female_count
+        description: "Number of female students"
+      - name: male_count
+        description: "Number of male students"
+      - name: low_income_count
+        description: "Number of low-income students"
+      - name: with_disability_count
+        description: "Number of students with disabilities"
+      - name: rural_count
+        description: "Number of students in rural areas"
+      - name: is_gender_equitable
+        description: "Whether the gender gap is within acceptable limits"
+      - name: is_income_equitable
+        description: "Whether the income gap is within acceptable limits"
+      - name: is_disability_equitable
+        description: "Whether the disability gap is within acceptable limits"
+      - name: is_location_equitable
+        description: "Whether the urban/rural gap is within acceptable limits"
+      - name: as_of_date
+        description: "Date when the metrics were calculated"
+      - name: dwh_created_at
+        description: "When the record was created in the data warehouse"
