@@ -4,7 +4,7 @@ pyyaml>=5.4.0
 pydantic==2.5.1
 python-jose[cryptography]==3.3.0
 passlib[bcrypt]==1.7.4
-python-multipart==0.0.6
+python-multipart==0.0.18
 email-validator==2.1.0
 python-dateutil==2.8.2
 
@@ -22,7 +22,7 @@ asyncpg==0.29.0  # For async PostgreSQL
 # Authentication
 python-jose[cryptography]==3.3.0
 passlib[bcrypt]==1.7.4
-python-multipart==0.0.6
+python-multipart==0.0.18
 
 # Data Processing
 numpy==1.25.2
@@ -34,7 +34,7 @@ scikit-learn>=1.0.0
 matplotlib>=3.4.0
 seaborn>=0.11.0
 plotly==5.17.0
-dash==2.14.2
+dash==2.15.0
 
 # Jupyter Environment
 jupyter>=1.0.0
@@ -67,7 +67,7 @@ pandas-profiling>=3.0.0
 
 # Utils
 pydantic-settings==2.1.0
-jinja2==3.1.2
+jinja2==3.1.6
 aiofiles==23.2.1
 slowapi==0.1.9
 
